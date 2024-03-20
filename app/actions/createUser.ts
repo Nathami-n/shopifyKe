@@ -1,29 +1,26 @@
 'use server'
-import prisma from '@app/libs/prismadb'
 import bcrypt from 'bcrypt'
+import client from '@app/libs/prismadb'
+export const createUser = async ( FormData: FormData) => {
 
-interface User {
-    name: string
-    hashedPassword: string
-}
+    const name = FormData.get('name')?.toString() || null;
+    const password = FormData.get('password')?.toString() || null;
+    if (name === null || password === null){
+        throw new Error("Invalid credentials")
+    }
 
-export const createUser = async (
-    FormData: FormData
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    ) => {
-    const name = FormData.get('name');
-
-    const password = FormData.get('password');
-    const hashedPassword = bcrypt.hash(password, 12);
-    const user: User = {
+    const user = {
         name,
         hashedPassword
     }
-    const data = await prisma.user.create({
+
+    const response = await client.user.create({
         data:{
             ...user
         }
     })
 
-    return data
-}
+    return response
+};

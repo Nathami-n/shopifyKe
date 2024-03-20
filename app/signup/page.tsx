@@ -1,22 +1,28 @@
 'use client'
 import { createUser } from '@app/actions/createUser'
+import toast from 'react-hot-toast';
 
 const SignUP = () => {
-    const handleRegister = (FormData: FormData) => {
-        const user = createUser(FormData);
+    const handleRegister = async (FormData: FormData) => {
+        const user = await createUser(FormData);
         console.log(user);
+        if (user) {
+            toast.success("success")
+        } else {
+            toast.error("something went wrong")
+        }
     }
     return (
-        <div 
-        className="
+        <div
+            className="
         flex
         justify-center
         items-center
         h-screen
         ">
-           
-            <form 
-            className="
+
+            <form
+                className="
             border
             shadow-lg
             rounded-lg
@@ -24,13 +30,13 @@ const SignUP = () => {
             h-[500px]
             "
             action={handleRegister}
-            method='POST'
             >
-             <h1 className="text-rose-600 text-xl text-center "> Awesome Form</h1>
+                <h1 className="text-rose-600 text-xl text-center "> Awesome Form</h1>
                 <input
                     type="text"
                     name='name'
                     required
+                    placeholder='name'
                     className='
                     outline-none
                     border
@@ -42,6 +48,7 @@ const SignUP = () => {
                 <input
                     type="password"
                     name='password'
+                    placeholder='password'
                     required
                     className='
                     outline-none
@@ -52,7 +59,7 @@ const SignUP = () => {
                     '
                 />
                 <button
-                className='
+                    className='
                 w-full
                 border
                 border-rose-400
@@ -61,7 +68,7 @@ const SignUP = () => {
                 text-white
                 rounded-lg
                 mt-6
-                ' 
+                '
                 >Submit</button>
             </form>
         </div>
